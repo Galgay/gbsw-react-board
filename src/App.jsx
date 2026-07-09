@@ -10,38 +10,57 @@ import BoardListPage from "./pages/BoardListPage";
 import BoardCreatePage from "./pages/BoardCreatePage";
 import BoardEditPage from "./pages/BoardEditPage";
 
+const testSupabase = createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+);
 export default function App() {
     const [session, setSession] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const [boards, setBoards] = useState([
-        {
-            id: 1,
-            title: "게시판을 만들어 봅시다.",
-            content: "리액트를 이용해 게시판을 만들어 보도록 합시다.",
-            author: "서정민",
-            createdAt: "2026.07.07",
-            views: 128,
-        },
-        {
-            id: 2,
-            title: "컴포넌트 분리",
-            content:
-                "하나의 큰 컴포넌트에 모든 코드를 작성하지 않고, 게시글 하나를 보여주는 부분(BoardItem), 게시글 목록을 관리하는 부분(BoardList)처럼 기능에 따라 나누면 코드를 이해하고 수정하기 쉬워집니다.",
-            author: "서정민",
-            createdAt: "2026.07.07",
-            views: 74,
-        },
-        {
-            id: 3,
-            title: "리액트 라우터",
-            content:
-                "리액트는 기본적으로 SPA(Single Page Application) 방식으로 동작하지만, React Router를 사용하면 URL 경로(path)에 따라 렌더링할 컴포넌트를 변경하여 여러 페이지처럼 동작하는 화면을 구성할 수 있습니다.",
-            author: "서정민",
-            createdAt: "2026.07.07",
-            views: 51,
-        },
+        // {
+        //     id: 1,
+        //     title: "게시판을 만들어 봅시다.",
+        //     content: "리액트를 이용해 게시판을 만들어 보도록 합시다.",
+        //     author: "서정민",
+        //     createdAt: "2026.07.07",
+        //     views: 128,
+        // },
+        // {
+        //     id: 2,
+        //     title: "컴포넌트 분리",
+        //     content:
+        //         "하나의 큰 컴포넌트에 모든 코드를 작성하지 않고, 게시글 하나를 보여주는 부분(BoardItem), 게시글 목록을 관리하는 부분(BoardList)처럼 기능에 따라 나누면 코드를 이해하고 수정하기 쉬워집니다.",
+        //     author: "서정민",
+        //     createdAt: "2026.07.07",
+        //     views: 74,
+        // },
+        // {
+        //     id: 3,
+        //     title: "리액트 라우터",
+        //     content:
+        //         "리액트는 기본적으로 SPA(Single Page Application) 방식으로 동작하지만, React Router를 사용하면 URL 경로(path)에 따라 렌더링할 컴포넌트를 변경하여 여러 페이지처럼 동작하는 화면을 구성할 수 있습니다.",
+        //     author: "서정민",
+        //     createdAt: "2026.07.07",
+        //     views: 51,
+        // },
     ]);
+
+    async function getBoards() {
+        const { data, error } = await testSupabase.from("tb_board").select();
+
+        console.log(data);
+        if (error) {
+            console.error(error);
+            return;
+        }
+        setBoards(data);
+    }
+
+    useEffect(() => {
+        getBoards();
+    }, []);
 
     const handleDeleteBoard = (id) => {
         const newBoards = [...boards];
@@ -51,7 +70,7 @@ export default function App() {
 
         // Array.map() -> List<Board> -> List<Object>
 
-        setBoards(boards.filter());
+        // setBoards(boards.filter());
         // setBoards((prevBoards) =>
         //     prevBoards.filter((board) => board.id !== id),
         // );

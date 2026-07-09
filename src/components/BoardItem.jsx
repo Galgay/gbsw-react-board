@@ -1,10 +1,20 @@
+import { supabase } from "@/lib/supabase/client";
 import { useNavigate } from "react-router-dom";
 
 const BoardItem = ({ board, onDelete }) => {
     const navigate = useNavigate();
 
-    const onDeleteBtnClick = () => {
+    const onDeleteBtnClick = async () => {
         if (confirm("진짜 삭제할까요?")) {
+            const { error } = await supabase
+                .from("tb_board")
+                .delete()
+                .eq("id", board.id);
+
+            if (error) {
+                throw error;
+            }
+
             onDelete(board.id);
             navigate("/");
         }
