@@ -10,10 +10,6 @@ import BoardListPage from "./pages/BoardListPage";
 import BoardCreatePage from "./pages/BoardCreatePage";
 import BoardEditPage from "./pages/BoardEditPage";
 
-const testSupabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-);
 export default function App() {
     const [session, setSession] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -48,7 +44,7 @@ export default function App() {
     ]);
 
     async function getBoards() {
-        const { data, error } = await testSupabase.from("tb_board").select();
+        const { data, error } = await supabase.from("tb_board").select();
 
         console.log(data);
         if (error) {
